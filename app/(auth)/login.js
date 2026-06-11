@@ -69,6 +69,29 @@ export default function Login() {
     ]).start();
   };
 
+  const slideAnim = useRef(new Animated.Value(-300)).current;
+  const [message, setMessage] = useState('');
+  
+  const showAlert = (msg) => {
+    setMessage(msg);
+
+    // 2. Configurar a animação de entrada (Slide Down)
+    Animated.timing(slideAnim, {
+      toValue: 0, // Posição final (aparece)
+      duration: 500,
+      useNativeDriver: true, // Importante para performance
+    }).start(() => {
+      // 3. Após 2 segundos, esconder a animação (Slide Up)
+      setTimeout(() => {
+        Animated.timing(slideAnim, {
+          toValue: -100, // Posição inicial (some)
+          duration: 500,
+          useNativeDriver: true,
+        }).start();
+      }, 3000);
+    });
+  };
+
   const handleLogin = async () => {
           const usuarioEncontrado = usuarios.find(
             (u) => u.email === email && u.senha === senha
@@ -77,7 +100,7 @@ export default function Login() {
           if (validar() && usuarioEncontrado) {
             await salvarSessaoUsuario(usuarioEncontrado); 
             
-            router.replace("/(tabs)"); // COLOCAR REDIRECIONAMENTO AQUI 
+            router.replace("/(tabs)"); 
           } else {
             startShake();
           }

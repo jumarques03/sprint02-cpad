@@ -19,5 +19,6 @@ const styles = StyleSheet.create({
     height: 44,
     justifyContent: "center",
     alignItems: "flex-start",
+    marginBottom: 20,
   },
 });

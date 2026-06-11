@@ -17,7 +17,7 @@ import BackArrow from "../../components/BackArrow";
 
 export default function Register() {
   const router = useRouter();
-  const { usuarios, salvarSessaoUsuario } = useContext(authContext);
+  const { usuarios, salvarSessaoUsuario, cadastrarUsuario} = useContext(authContext);
 
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
@@ -92,9 +92,32 @@ export default function Register() {
     ]).start();
   };
 
+  const slideAnim = useRef(new Animated.Value(-300)).current;
+  const [message, setMessage] = useState('');
+  
+  const showAlert = (msg) => {
+    setMessage(msg);
+
+    // 2. Configurar a animação de entrada (Slide Down)
+    Animated.timing(slideAnim, {
+      toValue: 0, // Posição final (aparece)
+      duration: 500,
+      useNativeDriver: true, // Importante para performance
+    }).start(() => {
+      // 3. Após 2 segundos, esconder a animação (Slide Up)
+      setTimeout(() => {
+        Animated.timing(slideAnim, {
+          toValue: -100, // Posição inicial (some)
+          duration: 500,
+          useNativeDriver: true,
+        }).start();
+      }, 3000);
+    });
+  };
+
   const handleCadastro = async () => {
     if (validar()) {
-      const novoUsuario = { nome, sobrenome, cpf, celular, email, senha};
+      const novoUsuario = { nome, sobrenome, cpf, telefone, email, senha};
       const sucesso = await cadastrarUsuario(novoUsuario);
 
       if (sucesso) {
@@ -239,7 +262,7 @@ export default function Register() {
                         }}
                         keyboardType="numeric"
                         autoCapitalize="none"
-                        erro={erros.email}
+                        erro={erros.token}
                     />                
                  </Input>
 
