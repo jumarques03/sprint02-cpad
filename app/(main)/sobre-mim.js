@@ -43,11 +43,6 @@ export default function SobreMim() {
         />
 
         <ProfileInfoField
-          label="Empresa"
-          value="EcoTrack"
-        />
-
-        <ProfileInfoField
           label="Função"
           value="Operador"
         />

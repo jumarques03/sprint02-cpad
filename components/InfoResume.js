@@ -1,9 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function InfoResume({
-  userName,
   team,
   serviceOrder,
   address,
@@ -11,18 +9,6 @@ export default function InfoResume({
 }) {
   return (
     <View style={styles.card}>
-      <View style={styles.header}>
-        <Ionicons
-          name="person-circle-outline"
-          size={30}
-          color="#081EAD"
-        />
-
-        <Text style={styles.name}>
-          Olá, {userName}
-        </Text>
-      </View>
-
       <Text style={styles.infoEquipe}>
         Você faz parte da{" "}
         <Text style={styles.highlight}>
@@ -60,20 +46,6 @@ const styles = StyleSheet.create({
     padding: 7,
     marginBottom: 10
   },
-
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 28,
-    gap: 12,
-  },
-
-  name: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#081EAD",
-  },
-
   info: {
     fontSize: 16,
     color: "#081EAD",

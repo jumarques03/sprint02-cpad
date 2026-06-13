@@ -100,7 +100,7 @@ export default function Login() {
           if (validar() && usuarioEncontrado) {
             await salvarSessaoUsuario(usuarioEncontrado); 
             
-            router.replace("/(tabs)"); 
+            router.replace("/(main)"); 
           } else {
             startShake();
           }
@@ -108,9 +108,6 @@ export default function Login() {
 
   return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <BackArrow/>
-        </View>
         <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -121,6 +118,7 @@ export default function Login() {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             >
+                <BackArrow/>
                 <Text style={styles.titulo}>ECOTRACK</Text> 
                 <Text style={styles.subtitulo}>Visão autônoma, gestão preditiva</Text> 
 
@@ -174,28 +172,19 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: "#FFFF"
   },
-    header: {
-    height: 90,
-    justifyContent: "flex-end",
-    paddingHorizontal: 24,
-    paddingBottom: 10,
-    backgroundColor: "#FFFFFF",
-    borderBottomWidth: 1,
-    borderBottomColor: "#EFEFEF",
-    elevation: 3,
-    },
-
-    scrollContainer: {
+  scrollContainer: {
     flexGrow: 1,
     padding: 24,
-    justifyContent: "center"
-    },
+    paddingTop: 30, // espaço para a seta
+    justifyContent: "flex-start",
+  },
   titulo: {
     fontSize: 36,
     fontWeight: "bold",
     color: "#081EAD",
     textAlign: "center",
     marginBottom: 8,
+    marginTop: 80,
     fontFamily: 'Black Ops One',
     letterSpacing: 5,
   },

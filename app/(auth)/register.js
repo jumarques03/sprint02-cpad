@@ -14,6 +14,7 @@ import { authContext } from "../../context/AuthContext";
 import Input, {CustomInput, CPFInput, PhoneNumberInput} from "../../components/Input";
 import BlueButton from "../../components/BlueButton";
 import BackArrow from "../../components/BackArrow";
+import SlideAlert from "../../components/SlideAlert";
 
 export default function Register() {
   const router = useRouter();
@@ -55,8 +56,8 @@ export default function Register() {
     }
     if (!email) {
       novosErros.email = "Campo obrigatório";
-    } else if (!email.includes("@")) {
-      novosErros.email = "Formato de e-mail inválido";
+    } else if (!email.includes("@motiva.com")) {
+      novosErros.email = "E-mail inválido";
     }
     if (!senha) {
       novosErros.senha = "Campo obrigatório"; 
@@ -136,142 +137,142 @@ export default function Register() {
   };
   return (
   <View style={styles.container}>
-    <View style={styles.header}>
-      <BackArrow />
-    </View>
-
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
     >
+      <SlideAlert slideAnim={slideAnim} message={message} />
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-                <Text style={styles.titulo}>ECOTRACK</Text> 
-                <Text style={styles.subtitulo}>Visão autônoma, gestão preditiva</Text> 
+        <BackArrow/>
+        <Text style={styles.titulo}>ECOTRACK</Text> 
+        <Text style={styles.subtitulo}>Visão autônoma, gestão preditiva</Text> 
 
-                <Text style={styles.rotulo}>Registro</Text>
-                {erros.login && (
-                    <View style={styles.containerErroLogin}>
-                    <Text style={styles.erroLoginTexto}>{erros.login}</Text>
-                    </View>
-                )}
-                <Input>
-                    <CustomInput
-                        label="Nome:"
-                        placeholder="Insira seu primeiro nome"
-                        value={nome}
-                        onChangeText={(text) => {
-                        setNome(text);
-                        setErros({});
-                        }}
-                        keyboardType="default"
-                        autoCapitalize="none"
-                        erro={erros.nome}
-                    />
-                    <CustomInput
-                        label="Sobrenome:"
-                        placeholder="Insira seu sobrenome"
-                        value={sobrenome}
-                        onChangeText={(text) => {
-                        setSobrenome(text);
-                        setErros({});
-                        }}
-                        keyboardType="default"
-                        autoCapitalize="none"
-                        erro={erros.sobrenome}
-                    />
-                    <CPFInput
-                        label="CPF:"
-                        placeholder="Insira seu CPF"
-                        value={cpf}
-                        onChangeText={(text) => {
-                        setCPF(text);
-                        setErros({});
-                        }}
-                        keyboardType="numeric"
-                        autoCapitalize="none"
-                        erro={erros.cpf}
-                    />   
-                    <PhoneNumberInput
-                        label="Telefone:"
-                        placeholder="Insira seu número de telefone"
-                        value={telefone}
-                        onChangeText={(text) => {
-                        setTelefone(text);
-                        setErros({});
-                        }}
-                        keyboardType="numeric"
-                        autoCapitalize="none"
-                        erro={erros.telefone}
-                    />              
-                </Input>
+        <Text style={styles.rotulo}>Registro</Text>
+        {erros.login && (
+            <View style={styles.containerErroLogin}>
+            <Text style={styles.erroLoginTexto}>{erros.login}</Text>
+            </View>
+        )}
+        <Input>
+            <CustomInput
+                label="Nome:"
+                placeholder="Insira seu primeiro nome"
+                value={nome}
+                onChangeText={(text) => {
+                setNome(text);
+                setErros({});
+                }}
+                keyboardType="default"
+                autoCapitalize="none"
+                erro={erros.nome}
+            />
+            <CustomInput
+                label="Sobrenome:"
+                placeholder="Insira seu sobrenome"
+                value={sobrenome}
+                onChangeText={(text) => {
+                setSobrenome(text);
+                setErros({});
+                }}
+                keyboardType="default"
+                autoCapitalize="none"
+                erro={erros.sobrenome}
+            />
+            <CPFInput
+                label="CPF:"
+                placeholder="Insira seu CPF"
+                value={cpf}
+                onChangeText={(text) => {
+                setCPF(text);
+                setErros({});
+                }}
+                keyboardType="numeric"
+                autoCapitalize="none"
+                erro={erros.cpf}
+            />   
+            <PhoneNumberInput
+                label="Telefone:"
+                placeholder="Insira seu número de telefone"
+                value={telefone}
+                onChangeText={(text) => {
+                setTelefone(text);
+                setErros({});
+                }}
+                keyboardType="numeric"
+                autoCapitalize="none"
+                erro={erros.telefone}
+            />              
+        </Input>
 
-                <Text style={styles.rotulo}>Motiva</Text>
-                <Input>
-                    <CustomInput
-                        label="Email:"
-                        placeholder="Insira seu e-mail"
-                        value={email}
-                        onChangeText={(text) => {
-                        setEmail(text);
-                        setErros({});
-                        }}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                        erro={erros.email}
-                    />
-                    <CustomInput
-                        label="Senha:"
-                        placeholder="Insira sua senha"
-                        value={senha}
-                        onChangeText={(text) => {
-                        setSenha(text);
-                        setErros({});
-                        }}
-                        secureTextEntry={!senhaVisivel}
-                        isPassword={true}
-                        senhaVisivel={senhaVisivel}
-                        setSenhaVisivel={setSenhaVisivel}
-                        erro={erros.senha}
-                    />
-                    <CustomInput
-                        label="Confirmar senha:"
-                        placeholder="Insira sua senha novamente"
-                        value={confirmarSenha}
-                        onChangeText={(text) => {
-                        setConfirmarSenha(text);
-                        setErros({});
-                        }}
-                        secureTextEntry={!senhaVisivel}
-                        isPassword={true}
-                        senhaVisivel={senhaVisivel}
-                        setSenhaVisivel={setSenhaVisivel}
-                        erro={erros.confirmarSenha}
-                    />
-                    <CustomInput
-                        label="Token:"
-                        placeholder="Ex: 123456"
-                        value={token}
-                        onChangeText={(text) => {
-                        setToken(text);
-                        setErros({});
-                        }}
-                        keyboardType="numeric"
-                        autoCapitalize="none"
-                        erro={erros.token}
-                    />                
-                 </Input>
+        <Text style={styles.rotulo}>Motiva</Text>
+        <Input>
+            <CustomInput
+                label="Email:"
+                placeholder="Insira seu e-mail"
+                value={email}
+                onChangeText={(text) => {
+                setEmail(text);
+                setErros({});
+                }}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                erro={erros.email}
+            />
+            <Text style={styles.subrotulo}>Utilize o e-mail corporativo informado pela Motiva para realizar o cadastro.</Text>
+            <CustomInput
+                label="Senha:"
+                placeholder="Insira sua senha"
+                value={senha}
+                onChangeText={(text) => {
+                setSenha(text);
+                setErros({});
+                }}
+                secureTextEntry={!senhaVisivel}
+                isPassword={true}
+                senhaVisivel={senhaVisivel}
+                setSenhaVisivel={setSenhaVisivel}
+                erro={erros.senha}
+            />
+            <CustomInput
+                label="Confirmar senha:"
+                placeholder="Insira sua senha novamente"
+                value={confirmarSenha}
+                onChangeText={(text) => {
+                setConfirmarSenha(text);
+                setErros({});
+                }}
+                secureTextEntry={!senhaVisivel}
+                isPassword={true}
+                senhaVisivel={senhaVisivel}
+                setSenhaVisivel={setSenhaVisivel}
+                erro={erros.confirmarSenha}
+            />
+            <CustomInput
+                label="Token:"
+                placeholder="Ex: 123456"
+                value={token}
+                onChangeText={(text) => {
+                setToken(text);
+                setErros({});
+                }}
+                keyboardType="numeric"
+                autoCapitalize="none"
+                erro={erros.token}
+            />    
+            <Text style={styles.subrotulo}>Insira o Token enviado pela motiva para validar a autenticidade da sua conta</Text>            
+          </Input>
 
-                <Animated.View style={{ transform: [{ translateX: shakeAnimation }] }}>
-                    <BlueButton title="Finalizar" onPress={handleCadastro} />
-                </Animated.View>
-            </ScrollView>
-        </KeyboardAvoidingView>
-      </View>
+        <Animated.View style={{ transform: [{ translateX: shakeAnimation }] }}>
+            <BlueButton title="Finalizar" onPress={handleCadastro} />
+        </Animated.View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  </View>
   );
 }
 
@@ -321,6 +322,11 @@ const styles = StyleSheet.create({
     marginBottom: 7,
     fontFamily: 'Black Ops One',
     marginTop: 20
+  },
+  subrotulo: {
+    color: "#868181",
+    fontSize: 14, 
+    marginBottom: 10
   },
   erroLoginTexto: {
     color: "#FF4D4D",

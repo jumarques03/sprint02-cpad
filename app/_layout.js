@@ -16,7 +16,8 @@ function RootNavigator() {
     if (!sessao && !estaNaAuth) {
       router.replace("/(auth)/start");
     } else if (sessao && estaNaAuth) {
-      router.replace("/(tabs)/"); // MUDAR REDIRECIONAMENTO
+      // CORRIGIDO: Redireciona para a raiz da nova Stack principal
+      router.replace("/(main)/"); 
     }
   }, [sessao, segments, usuarios]);
 

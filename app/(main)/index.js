@@ -1,4 +1,4 @@
-// app/(tabs)/index.js
+// app/(main)/index.js
 import { useState, useContext, useRef, useCallback } from "react";
 import {
   View,
@@ -8,12 +8,14 @@ import {
   Platform,
   ScrollView,
   Animated,
+  TouchableOpacity
 } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
 import { authContext } from "../../context/AuthContext";
 import HomeCards from "../../components/HomeCards"; 
 import EnableMonitoring from "../../components/EnableMonitoring";
 import InfoResume from "../../components/InfoResume";
+import { Ionicons } from "@expo/vector-icons"; 
 
 export default function Inicio() {
   const router = useRouter();
@@ -35,30 +37,47 @@ export default function Inicio() {
             showsVerticalScrollIndicator={false}
           >
             <View style={styles.cards}>
+              <View style={styles.header}>
+                <TouchableOpacity
+                  onPress={() => router.push("/(main)/perfil")}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons
+                    name="person-circle-outline"
+                    size={34}
+                    color="#081EAD"
+                  />
+                </TouchableOpacity>
+        
+                <Text style={styles.name}>
+                  Olá, João
+                </Text>
+              </View>
               <InfoResume
-                  userName="João"
                   team="EQUIPE ALPHA 6766"
                   serviceOrder="1024"
                   address="Rodovia BR111 KM 121"
                   schedule="09:00 - 16:00"
               />
 
-              <EnableMonitoring onPress={() => {}} />
+              <EnableMonitoring onPress={() => router.push("/(main)/monitoramento")} />
 
               <Text style={styles.sectionTitle}>Monitoramento</Text>
 
               <View style={styles.cardsContainer}>
+                {/* Adicionado link para navegar na stack para o Mapa */}
                 <HomeCards
                   title="Mapeamento"
                   description="Falar com o assistente operacional"
                   icon="chatbubble-ellipses-outline"
-                  onPress={() => {}}
+                  onPress={() => router.push("/(main)/mapa")}
                 />
+                {/* CORRIGIDO: Modificado de /(tabs)/avisos para /(main)/avisos */}
                 <HomeCards
                   title="Avisos"
                   description="Falar com o assistente operacional"
                   icon="chatbubble-ellipses-outline"
-                  onPress={() => router.push("/(tabs)/avisos")}
+                  onPress={() => router.push("/(main)/avisos")}
                 />
               </View>
 
@@ -69,13 +88,13 @@ export default function Inicio() {
                   title="Dúvidas"
                   description="Falar com o assistente operacional"
                   icon="chatbubble-ellipses-outline"
-                  onPress={() => router.push("/(agents)/duvidas")}
+                  onPress={() => router.push("/(main)/duvidas")}
                 />
                 <HomeCards
                   title="Cancelamento"
                   description="Falar com o assistente operacional"
                   icon="chatbubble-ellipses-outline"
-                  onPress={() => router.push("/(agents)/cancelamento")}
+                  onPress={() => router.push("/(main)/cancelamento")}
                 />
               </View>
             </View>
@@ -128,5 +147,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginTop: -10,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 28,
+    gap: 12,
+  },
+
+  name: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#081EAD",
   },
 });

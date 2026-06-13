@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
-export default function ChatHeader({ title }) {
+export default function Header({ title }) {
   const router = useRouter();
 
   return (
@@ -14,7 +14,7 @@ export default function ChatHeader({ title }) {
 
       <Text style={styles.title}>{title}</Text>
 
-      <Ionicons name="ellipsis-vertical" size={24} color="#202020" />
+      <Ionicons name="ellipsis-vertical" size={24} color="#E5E7FF" />
     </View>
   );
 }

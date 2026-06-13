@@ -3,25 +3,19 @@ import { Text, StyleSheet, View } from "react-native";
 
 export default function Warnings({ message }) {
   return (
-    <View style={styles.card}>
-      <Text style={styles.text}>{message}</Text>
-    </View>
+  <View style={styles.container}>
+    <Text style={styles.texto}>Nenhum aviso anunciado</Text>
+  </View>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    alignSelf: "center",
-    backgroundColor: "#081EAD",
-    paddingVertical: 14,
-    paddingHorizontal: 28,
-    borderRadius: 18,
-    marginTop: 16,
+  container: {
+    flex: 1,
+    justifyContent: "center", // centro vertical
+    alignItems: "center",     // centro horizontal
   },
-
-  text: {
-    color: "#FFFFFF",
-    fontSize: 13,
-    fontWeight: "500",
-  },
+  texto: {
+    color: "#bbbbbb"
+  }
 });

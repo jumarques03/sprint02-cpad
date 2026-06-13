@@ -1,54 +1,42 @@
 import React, { useState } from "react";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
-
-import ChatHeader from "../../components/ChatHeader";
+import { View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import Header from "../../components/Header";
 import AssistantInfo from "../../components/AssistantInfo";
 import ChatBubble from "../../components/ChatBubble";
 import ChatInput from "../../components/ChatInput";
 
-export default function Cancelamento() {
+export default function Duvidas() {
   const [message, setMessage] = useState("");
 
   return (
     <View style={styles.container}>
-
-      <ChatHeader title="Cancelamento" />
+      <Header title="Dúvidas" />
 
       <KeyboardAvoidingView
         style={styles.content}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <ScrollView
-          contentContainerStyle={styles.scroll}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView contentContainerStyle={styles.scroll}>
           <AssistantInfo
-            title="Assistente de Cancelamento"
-            description="Reporte impedimentos de roçada e atualize o status da operação."
+            title="Assistente Operacional"
+            description="Tire dúvidas sobre procedimentos e operações."
           />
 
           <ChatBubble
             type="bot"
-            message="Olá! Sou o assistente de cancelamento da EcoTrack. Me informe o motivo do impedimento da operação."
+            message="Olá! Sou o assistente virtual da EcoTrack. Como posso te ajudar?"
             time="10:30"
           />
 
           <ChatBubble
             type="user"
-            message="A equipe não conseguiu iniciar a roçada no trecho informado."
+            message="Qual o procedimento para iniciar o monitoramento?"
             time="10:31"
           />
 
           <ChatBubble
             type="bot"
-            message="Entendi. Selecione ou descreva o motivo: chuva, acesso bloqueado, risco operacional, ausência de equipe, problema no veículo ou outro impedimento."
+            message="Para iniciar o monitoramento, basta acessar a opção “Ativar Monitoramento” na tela inicial e seguir as instruções. A câmera do veículo será ativada para iniciar a visão computacional."
             time="10:31"
           />
         </ScrollView>
