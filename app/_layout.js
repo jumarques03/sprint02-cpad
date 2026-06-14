@@ -2,6 +2,7 @@ import { Slot, useRouter, useSegments } from "expo-router";
 import { useContext, useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { authContext, AuthProvider } from "../context/AuthContext";
+import { MockDataProvider } from "../context/MockDataContext";
 
 function RootNavigator() {
   const { sessao, usuarios } = useContext(authContext);
@@ -23,8 +24,8 @@ function RootNavigator() {
 
   if (usuarios === null) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", backgroundColor: "#311f7b" }}>
-        <ActivityIndicator size="large" color="#4030f2" />
+      <View style={{ flex: 1, justifyContent: "center", backgroundColor: "#ffffff" }}>
+        <ActivityIndicator size="large" color="#081EAD"/>
       </View>
     );
   }
@@ -35,7 +36,9 @@ function RootNavigator() {
 export default function Layout() {
   return (
     <AuthProvider>
+      <MockDataProvider>
         <RootNavigator/>
+      </MockDataProvider>
     </AuthProvider>
   );
 }

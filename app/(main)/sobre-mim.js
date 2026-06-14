@@ -10,7 +10,11 @@ import BackArrow from "../../components/BackArrow";
 import ProfileAvatar from "../../components/ProfileAvatar";
 import ProfileInfoField from "../../components/ProfileInfoField";
 
+import { useMockData } from "../../context/MockDataContext";
+
 export default function SobreMim() {
+  const { user } = useMockData();
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -28,23 +32,29 @@ export default function SobreMim() {
         showsVerticalScrollIndicator={false}
       >
         <ProfileAvatar
-          name="João da Silva"
+          name={user.nomeCompleto}
+          photo={user.photo}
           onEdit={() => {}}
         />
 
         <ProfileInfoField
           label="Nome"
-          value="João da Silva"
+          value={user.nomeCompleto}
         />
 
         <ProfileInfoField
           label="E-mail"
-          value="joao.silva@ecotrack.com"
+          value={user.email}
         />
 
         <ProfileInfoField
           label="Função"
-          value="Operador"
+          value={user.role}
+        />
+
+        <ProfileInfoField
+          label="Equipe"
+          value={user.equipe}
         />
       </ScrollView>
     </View>

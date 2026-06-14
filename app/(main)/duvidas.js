@@ -4,9 +4,12 @@ import Header from "../../components/Header";
 import AssistantInfo from "../../components/AssistantInfo";
 import ChatBubble from "../../components/ChatBubble";
 import ChatInput from "../../components/ChatInput";
+import { useMockData } from "../../context/MockDataContext";
 
 export default function Duvidas() {
   const [message, setMessage] = useState("");
+
+  const { chats, enviarMensagemChat } = useMockData();
 
   return (
     <View style={styles.container}>
@@ -22,29 +25,21 @@ export default function Duvidas() {
             description="Tire dúvidas sobre procedimentos e operações."
           />
 
-          <ChatBubble
-            type="bot"
-            message="Olá! Sou o assistente virtual da EcoTrack. Como posso te ajudar?"
-            time="10:30"
-          />
-
-          <ChatBubble
-            type="user"
-            message="Qual o procedimento para iniciar o monitoramento?"
-            time="10:31"
-          />
-
-          <ChatBubble
-            type="bot"
-            message="Para iniciar o monitoramento, basta acessar a opção “Ativar Monitoramento” na tela inicial e seguir as instruções. A câmera do veículo será ativada para iniciar a visão computacional."
-            time="10:31"
-          />
+          {chats.duvidas.map((msg) => (
+            <ChatBubble
+              key={msg.id}
+              type={msg.type}
+              message={msg.message}
+              time={msg.time}
+            />
+          ))}
         </ScrollView>
 
         <ChatInput
           value={message}
           onChangeText={setMessage}
           onSend={() => {
+            enviarMensagemChat("duvidas", message);
             setMessage("");
           }}
         />

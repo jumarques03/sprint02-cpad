@@ -12,12 +12,15 @@ import AssistantInfo from "../../components/AssistantInfo";
 import ChatBubble from "../../components/ChatBubble";
 import ChatInput from "../../components/ChatInput";
 
+import { useMockData } from "../../context/MockDataContext";
+
 export default function Cancelamento() {
   const [message, setMessage] = useState("");
 
+  const { chats, enviarMensagemChat } = useMockData();
+
   return (
     <View style={styles.container}>
-
       <Header title="Cancelamento" />
 
       <KeyboardAvoidingView
@@ -34,29 +37,21 @@ export default function Cancelamento() {
             description="Reporte impedimentos de roçada e atualize o status da operação."
           />
 
-          <ChatBubble
-            type="bot"
-            message="Olá! Sou o assistente de cancelamento da EcoTrack. Me informe o motivo do impedimento da operação."
-            time="10:30"
-          />
-
-          <ChatBubble
-            type="user"
-            message="A equipe não conseguiu iniciar a roçada no trecho informado."
-            time="10:31"
-          />
-
-          <ChatBubble
-            type="bot"
-            message="Entendi. Selecione ou descreva o motivo: chuva, acesso bloqueado, risco operacional, ausência de equipe, problema no veículo ou outro impedimento."
-            time="10:31"
-          />
+          {chats.cancelamento.map((msg) => (
+            <ChatBubble
+              key={msg.id}
+              type={msg.type}
+              message={msg.message}
+              time={msg.time}
+            />
+          ))}
         </ScrollView>
 
         <ChatInput
           value={message}
           onChangeText={setMessage}
           onSend={() => {
+            enviarMensagemChat("cancelamento", message);
             setMessage("");
           }}
         />

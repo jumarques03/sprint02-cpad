@@ -1,12 +1,11 @@
-// app/(main)/perfil.js
-
-import {React, useContext} from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
 } from "react-native";
+
 import { useRouter } from "expo-router";
 import BackArrow from "../../components/BackArrow";
 import ProfileHeader from "../../components/ProfileHeader";
@@ -14,20 +13,21 @@ import ProfileSection from "../../components/ProfileSection";
 import ProfileOption from "../../components/ProfileOption";
 import LogoutButton from "../../components/LogoutButton";
 import { authContext } from "../../context/AuthContext";
+import { useMockData } from "../../context/MockDataContext";
 
 export default function Perfil() {
   const router = useRouter();
   const { logoutUsuario } = useContext(authContext);
-  
+  const { user } = useMockData();
+
   const handleLogout = async () => {
-    await logoutUsuario(); 
+    await logoutUsuario();
     router.replace("/(auth)/start");
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        {/* Este componente deve executar router.back() para voltar para a index da Stack */}
         <BackArrow />
 
         <Text style={styles.pageTitle}>Perfil</Text>
@@ -40,9 +40,9 @@ export default function Perfil() {
         showsVerticalScrollIndicator={false}
       >
         <ProfileHeader
-          name="João da Silva"
-          email="joao.silva@motiva.com"
-          role="Operador"
+          name={user.nomeCompleto}
+          email={user.email}
+          role={user.role}
         />
 
         <ProfileSection title="Minha Conta">
@@ -75,7 +75,7 @@ export default function Perfil() {
           />
         </ProfileSection>
 
-        <LogoutButton onPress={handleLogout}/>
+        <LogoutButton onPress={handleLogout} />
       </ScrollView>
     </View>
   );

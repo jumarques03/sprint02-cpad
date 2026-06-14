@@ -1,21 +1,56 @@
-import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+// components/Warning.js
 
-export default function Warnings({ message }) {
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+
+export default function Warning({ title, message, date, hour }) {
   return (
-  <View style={styles.container}>
-    <Text style={styles.texto}>Nenhum aviso anunciado</Text>
-  </View>
+    <View style={styles.card}>
+      <Text style={styles.title}>{title}</Text>
+
+      <Text style={styles.message}>{message}</Text>
+
+      <View style={styles.dateContainer}>
+        {date ? <Text style={styles.dateText}>{date}</Text> : null}
+
+        {hour ? <Text style={styles.dateText}> - {hour}</Text> : null}
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center", // centro vertical
-    alignItems: "center",     // centro horizontal
+  card: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
   },
-  texto: {
-    color: "#bbbbbb"
-  }
+
+  title: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#081EAD",
+    marginBottom: 6,
+  },
+
+  message: {
+    fontSize: 14,
+    color: "#4E4E4E",
+    lineHeight: 22,
+    marginBottom: 10,
+  },
+
+  dateContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+
+  dateText: {
+    fontSize: 12,
+    color: "#9A9A9A",
+  },
 });

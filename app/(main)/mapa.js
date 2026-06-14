@@ -6,8 +6,11 @@ import InfoResume from "../../components/InfoResume";
 import MapImage from "../../components/MapImage";
 import IAResumeBox from "../../components/IAResumeBox";
 import ChatHeader from "../../components/Header";
+import { useMockData } from "../../context/MockDataContext";
 
 export default function Mapa() {
+    const {user} = useMockData();
+
   return (
     <View style={styles.container}>
       <ChatHeader title="Mapeamento"/>
@@ -17,13 +20,12 @@ export default function Mapa() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.infoPadding}>
-          <InfoResume
-            userName="João"
-            team="EQUIPE ALPHA 6766"
-            serviceOrder="1024"
-            address="Rodovia BR111 KM 121"
-            schedule="09:00 - 16:00"
-          />
+            <InfoResume
+              team={user.equipe}
+              serviceOrder={user.ordemServico}
+              address={user.endereco}
+              schedule={user.horario}
+            />
         </View>
         <MapImage source={require("../../assets/mapa.png")} />
 

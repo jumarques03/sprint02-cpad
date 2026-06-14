@@ -1,34 +1,76 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { VideoView, useVideoPlayer } from "expo-video";
 
-export default function MonitoringCameraCard({ image }) {
+export default function MonitoringCameraCard({
+  video,
+  ativo,
+  tempo,
+  deteccoes = [],
+}) {
+  const primeiraDeteccao = deteccoes[0];
+
+  const player = useVideoPlayer(video, (player) => {
+    player.loop = true;
+    player.muted = true;
+
+    if (ativo) {
+      player.play();
+    } else {
+      player.pause();
+    }
+  });
+
   return (
     <View style={styles.card}>
-      <View style={styles.imageContainer}>
-        <Image source={image} style={styles.image} resizeMode="cover" />
+      <View style={styles.videoContainer}>
+        <VideoView
+          style={styles.video}
+          player={player}
+          contentFit="cover"
+          nativeControls={false}
+        />
 
-        <View style={styles.liveBadge}>
-          <Text style={styles.liveText}>Ao vivo</Text>
+        <View
+          style={[
+            styles.liveBadge,
+            ativo ? styles.liveBadgeAtivo : styles.liveBadgeInativo,
+          ]}
+        >
+          <Text style={styles.liveText}>{ativo ? "Ao vivo" : "Offline"}</Text>
         </View>
 
         <View style={styles.timerBadge}>
-          <View style={styles.redDot} />
-          <Text style={styles.timerText}>00:32:15</Text>
+          <View style={ativo ? styles.redDot : styles.grayDot} />
+          <Text style={styles.timerText}>{tempo}</Text>
         </View>
 
-        <View style={styles.detectionBox} />
+        {ativo && primeiraDeteccao && (
+          <>
+            <View style={styles.detectionBox} />
+
+            <View style={styles.detectionLabel}>
+              <Text style={styles.detectionText}>
+                {primeiraDeteccao.tipo} • {primeiraDeteccao.confianca}%
+              </Text>
+            </View>
+          </>
+        )}
       </View>
 
       <View style={styles.infoArea}>
         <Text style={styles.infoTitle}>Visão Computacional</Text>
 
         <View style={styles.statusRow}>
-          <View style={styles.greenDot} />
-          <Text style={styles.statusText}>Ativa</Text>
+          <View style={ativo ? styles.greenDot : styles.grayStatusDot} />
+
+          <Text style={styles.statusText}>{ativo ? "Ativa" : "Inativa"}</Text>
         </View>
 
         <Text style={styles.description}>
-          Detectando grama e condições da via em tempo real.
+          {ativo && primeiraDeteccao
+            ? `Detectando ${primeiraDeteccao.tipo.toLowerCase()} com ${primeiraDeteccao.confianca}% de confiança. Altura estimada: ${primeiraDeteccao.alturaEstimativaCm} cm.`
+            : "O monitoramento ainda não foi iniciado. Ative a visão computacional pela tela inicial."}
         </Text>
       </View>
     </View>
@@ -46,13 +88,14 @@ const styles = StyleSheet.create({
     borderColor: "#E5E5E5",
   },
 
-  imageContainer: {
+  videoContainer: {
     width: "100%",
     height: 320,
     position: "relative",
+    backgroundColor: "#E5E7FF",
   },
 
-  image: {
+  video: {
     width: "100%",
     height: "100%",
   },
@@ -61,10 +104,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 14,
     left: 14,
-    backgroundColor: "#00A86B",
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 8,
+  },
+
+  liveBadgeAtivo: {
+    backgroundColor: "#00A86B",
+  },
+
+  liveBadgeInativo: {
+    backgroundColor: "#8A8A8A",
   },
 
   liveText: {
@@ -93,6 +143,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF3B30",
   },
 
+  grayDot: {
+    width: 9,
+    height: 9,
+    borderRadius: 5,
+    backgroundColor: "#BDBDBD",
+  },
+
   timerText: {
     color: "#FFFFFF",
     fontSize: 13,
@@ -107,6 +164,22 @@ const styles = StyleSheet.create({
     height: 90,
     borderWidth: 3,
     borderColor: "#081EAD",
+  },
+
+  detectionLabel: {
+    position: "absolute",
+    right: 56,
+    bottom: 44,
+    backgroundColor: "#081EAD",
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+  },
+
+  detectionText: {
+    color: "#FFFFFF",
+    fontSize: 11,
+    fontWeight: "bold",
   },
 
   infoArea: {
@@ -132,6 +205,13 @@ const styles = StyleSheet.create({
     height: 12,
     borderRadius: 6,
     backgroundColor: "#00C853",
+  },
+
+  grayStatusDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: "#BDBDBD",
   },
 
   statusText: {

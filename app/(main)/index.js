@@ -1,5 +1,3 @@
-// app/(main)/index.js
-import { useState, useContext, useRef, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,100 +5,114 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Animated,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
-import { useRouter, useFocusEffect } from "expo-router";
-import { authContext } from "../../context/AuthContext";
-import HomeCards from "../../components/HomeCards"; 
+
+import { useRouter } from "expo-router";
+import HomeCards from "../../components/HomeCards";
 import EnableMonitoring from "../../components/EnableMonitoring";
 import InfoResume from "../../components/InfoResume";
-import { Ionicons } from "@expo/vector-icons"; 
+import { Ionicons } from "@expo/vector-icons";
+import { useMockData } from "../../context/MockDataContext";
 
 export default function Inicio() {
   const router = useRouter();
-  const { usuarios } = useContext(authContext);
+
+  const {
+    user,
+    monitoring,
+    iniciarMonitoramento,
+  } = useMockData();
+
+  const handleMonitoring = () => {
+    iniciarMonitoramento();
+    router.push("/(main)/monitoramento");
+  };
 
   return (
-      <View style={styles.container}>
-        <View style={styles.backgroundAzul} />
-        <View style={styles.backgroundBranco} />
+    <View style={styles.container}>
+      <View style={styles.backgroundAzul} />
+      <View style={styles.backgroundBranco} />
 
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          <ScrollView
-            contentContainerStyle={styles.scrollContainer}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-            <View style={styles.cards}>
-              <View style={styles.header}>
-                <TouchableOpacity
-                  onPress={() => router.push("/(main)/perfil")}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons
-                    name="person-circle-outline"
-                    size={34}
-                    color="#081EAD"
-                  />
-                </TouchableOpacity>
-        
-                <Text style={styles.name}>
-                  Olá, João
-                </Text>
-              </View>
-              <InfoResume
-                  team="EQUIPE ALPHA 6766"
-                  serviceOrder="1024"
-                  address="Rodovia BR111 KM 121"
-                  schedule="09:00 - 16:00"
+          <View style={styles.cards}>
+            <View style={styles.header}>
+              <TouchableOpacity
+                onPress={() => router.push("/(main)/perfil")}
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name="person-circle-outline"
+                  size={34}
+                  color="#081EAD"
+                />
+              </TouchableOpacity>
+
+              <Text style={styles.name}>
+                Olá, {user.nome}
+              </Text>
+            </View>
+
+            <InfoResume
+              team={user.equipe}
+              serviceOrder={user.ordemServico}
+              address={user.endereco}
+              schedule={user.horario}
+            />
+
+            <EnableMonitoring
+              onPress={handleMonitoring}
+              status={monitoring.ativo ? "ativo" : "inativo"}
+            />
+
+            <Text style={styles.sectionTitle}>Monitoramento</Text>
+
+            <View style={styles.cardsContainer}>
+              <HomeCards
+                title="Mapeamento"
+                description="Acesse os trechos e status da vegetação"
+                icon="map-outline"
+                onPress={() => router.push("/(main)/mapa")}
               />
 
-              <EnableMonitoring onPress={() => router.push("/(main)/monitoramento")} />
-
-              <Text style={styles.sectionTitle}>Monitoramento</Text>
-
-              <View style={styles.cardsContainer}>
-                {/* Adicionado link para navegar na stack para o Mapa */}
-                <HomeCards
-                  title="Mapeamento"
-                  description="Falar com o assistente operacional"
-                  icon="chatbubble-ellipses-outline"
-                  onPress={() => router.push("/(main)/mapa")}
-                />
-                {/* CORRIGIDO: Modificado de /(tabs)/avisos para /(main)/avisos */}
-                <HomeCards
-                  title="Avisos"
-                  description="Falar com o assistente operacional"
-                  icon="chatbubble-ellipses-outline"
-                  onPress={() => router.push("/(main)/avisos")}
-                />
-              </View>
-
-              <Text style={styles.sectionTitle}>Agentes</Text>
-
-              <View style={styles.cardsContainer}>
-                <HomeCards
-                  title="Dúvidas"
-                  description="Falar com o assistente operacional"
-                  icon="chatbubble-ellipses-outline"
-                  onPress={() => router.push("/(main)/duvidas")}
-                />
-                <HomeCards
-                  title="Cancelamento"
-                  description="Falar com o assistente operacional"
-                  icon="chatbubble-ellipses-outline"
-                  onPress={() => router.push("/(main)/cancelamento")}
-                />
-              </View>
+              <HomeCards
+                title="Avisos"
+                description="Veja alertas e comunicados importantes"
+                icon="notifications-outline"
+                onPress={() => router.push("/(main)/avisos")}
+              />
             </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </View>
+
+            <Text style={styles.sectionTitle}>Agentes</Text>
+
+            <View style={styles.cardsContainer}>
+              <HomeCards
+                title="Dúvidas"
+                description="Falar com o assistente operacional"
+                icon="chatbubble-ellipses-outline"
+                onPress={() => router.push("/(main)/duvidas")}
+              />
+
+              <HomeCards
+                title="Cancelamento"
+                description="Reportar impedimentos da operação"
+                icon="document-text-outline"
+                onPress={() => router.push("/(main)/cancelamento")}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 

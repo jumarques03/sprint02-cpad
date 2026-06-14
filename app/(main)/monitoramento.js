@@ -5,9 +5,11 @@ import { useRouter } from "expo-router";
 import MonitoringCameraCard from "../../components/MonitoringCameraCard";
 import StopMonitoringButton from "../../components/StopMonitoringButton";
 import Header from "../../components/Header";
+import { useMockData } from "../../context/MockDataContext";
 
 export default function Monitoramento() {
   const router = useRouter();
+  const { monitoring, encerrarMonitoramento } = useMockData();
 
   return (
     <View style={styles.container}>
@@ -18,11 +20,17 @@ export default function Monitoramento() {
         showsVerticalScrollIndicator={false}
       >
         <MonitoringCameraCard
-          image={require("../../assets/monitoramento.png")}
+          video={require("../../assets/monitoramento.mp4")}
+          ativo={monitoring.ativo}
+          tempo={monitoring.tempoMonitoramento}
+          deteccoes={monitoring.deteccoes}
         />
 
         <StopMonitoringButton
-          onPress={() => router.back()}
+          onPress={() => {
+            encerrarMonitoramento();
+            router.back();
+          }}
         />
       </ScrollView>
     </View>
