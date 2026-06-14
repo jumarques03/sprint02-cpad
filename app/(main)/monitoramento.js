@@ -20,10 +20,9 @@ export default function Monitoramento() {
         showsVerticalScrollIndicator={false}
       >
         <MonitoringCameraCard
-          video={require("../../assets/monitoramento.mp4")}
+          video={require("../../assets/mockVisaoComputacional.mp4")}
           ativo={monitoring.ativo}
           tempo={monitoring.tempoMonitoramento}
-          deteccoes={monitoring.deteccoes}
         />
 
         <StopMonitoringButton

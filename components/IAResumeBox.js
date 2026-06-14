@@ -4,9 +4,9 @@ import { View, Text, StyleSheet } from "react-native";
 export default function IAResumeBox({ text }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>RESUMO ATENÇÃO</Text>
+      <Text style={styles.sectionTitle}>Análise Operacional</Text>
 
-      <Text style={styles.label}>Resposta IA:</Text>
+      <Text style={styles.label}>Recomendação EcoTrackAI:</Text>
 
       <View style={styles.box}>
         <Text style={styles.text}>{text}</Text>

@@ -78,16 +78,12 @@ export default function Inicio() {
 
             <View style={styles.cardsContainer}>
               <HomeCards
-                title="Mapeamento"
-                description="Acesse os trechos e status da vegetação"
-                icon="map-outline"
+                image={require("../../assets/botaoMapa.png")}
                 onPress={() => router.push("/(main)/mapa")}
               />
 
               <HomeCards
-                title="Avisos"
-                description="Veja alertas e comunicados importantes"
-                icon="notifications-outline"
+                image={require("../../assets/avisos.png")}
                 onPress={() => router.push("/(main)/avisos")}
               />
             </View>
@@ -96,16 +92,12 @@ export default function Inicio() {
 
             <View style={styles.cardsContainer}>
               <HomeCards
-                title="Dúvidas"
-                description="Falar com o assistente operacional"
-                icon="chatbubble-ellipses-outline"
+                image={require("../../assets/duvidas.png")}
                 onPress={() => router.push("/(main)/duvidas")}
               />
 
               <HomeCards
-                title="Cancelamento"
-                description="Reportar impedimentos da operação"
-                icon="document-text-outline"
+                image={require("../../assets/cancelar.png")}
                 onPress={() => router.push("/(main)/cancelamento")}
               />
             </View>

@@ -6,9 +6,7 @@ export default function MonitoringCameraCard({
   video,
   ativo,
   tempo,
-  deteccoes = [],
 }) {
-  const primeiraDeteccao = deteccoes[0];
 
   const player = useVideoPlayer(video, (player) => {
     player.loop = true;
@@ -44,18 +42,6 @@ export default function MonitoringCameraCard({
           <View style={ativo ? styles.redDot : styles.grayDot} />
           <Text style={styles.timerText}>{tempo}</Text>
         </View>
-
-        {ativo && primeiraDeteccao && (
-          <>
-            <View style={styles.detectionBox} />
-
-            <View style={styles.detectionLabel}>
-              <Text style={styles.detectionText}>
-                {primeiraDeteccao.tipo} • {primeiraDeteccao.confianca}%
-              </Text>
-            </View>
-          </>
-        )}
       </View>
 
       <View style={styles.infoArea}>
@@ -68,8 +54,8 @@ export default function MonitoringCameraCard({
         </View>
 
         <Text style={styles.description}>
-          {ativo && primeiraDeteccao
-            ? `Detectando ${primeiraDeteccao.tipo.toLowerCase()} com ${primeiraDeteccao.confianca}% de confiança. Altura estimada: ${primeiraDeteccao.alturaEstimativaCm} cm.`
+          {ativo
+            ? `Detectando grama com 91% de confiança.`
             : "O monitoramento ainda não foi iniciado. Ative a visão computacional pela tela inicial."}
         </Text>
       </View>
@@ -79,10 +65,8 @@ export default function MonitoringCameraCard({
 
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 24,
     marginTop: 24,
     backgroundColor: "#FFFFFF",
-    borderRadius: 16,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "#E5E5E5",
@@ -154,32 +138,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 13,
     fontWeight: "600",
-  },
-
-  detectionBox: {
-    position: "absolute",
-    right: 56,
-    bottom: 70,
-    width: 130,
-    height: 90,
-    borderWidth: 3,
-    borderColor: "#081EAD",
-  },
-
-  detectionLabel: {
-    position: "absolute",
-    right: 56,
-    bottom: 44,
-    backgroundColor: "#081EAD",
-    paddingVertical: 5,
-    paddingHorizontal: 8,
-    borderRadius: 6,
-  },
-
-  detectionText: {
-    color: "#FFFFFF",
-    fontSize: 11,
-    fontWeight: "bold",
   },
 
   infoArea: {

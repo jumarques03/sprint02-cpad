@@ -30,7 +30,7 @@ export default function Mapa() {
         <MapImage source={require("../../assets/mapa.png")} />
 
         <IAResumeBox
-          text="Equipe Gama 7367 precisa ter atenção para os trechos 1 e 2 do Km 138, pois apresenta cerca de 25 cm em somente uma faixa de especificação, apesar de demonstrar maior parte verde."
+          text="Foram identificados pontos de atenção entre os km 113 e 116, além do trecho entre os km 120 e 121. Nessas regiões, a vegetação apresenta níveis próximos ou acima do limite recomendado. Recomenda-se priorizar a inspeção e a manutenção desses pontos antes de avançar para os demais segmentos da rota."
         />
       </ScrollView>
     </View>

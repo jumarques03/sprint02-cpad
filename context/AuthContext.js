@@ -68,6 +68,54 @@ export function AuthProvider({ children }) {
         setSessao(null);
     };
 
+    const atualizarSenhaUsuario = async (senhaAtual, novaSenha) => {
+        const usuariosAtuais = await carregarUsuarios();
+        const sessaoAtual = await carregarSessaoUsuario();
+
+        if (!sessaoAtual) {
+            return {
+            sucesso: false,
+            mensagem: "Nenhum usuário logado.",
+            };
+        }
+
+        const usuarioIndex = usuariosAtuais.findIndex(
+            (usuario) => usuario.email === sessaoAtual.email
+        );
+
+        if (usuarioIndex === -1) {
+            return {
+            sucesso: false,
+            mensagem: "Usuário não encontrado.",
+            };
+        }
+
+        if (usuariosAtuais[usuarioIndex].senha !== senhaAtual) {
+            return {
+            sucesso: false,
+            mensagem: "Senha atual incorreta.",
+            };
+        }
+
+        const usuarioAtualizado = {
+            ...usuariosAtuais[usuarioIndex],
+            senha: novaSenha,
+        };
+
+        const novaListaUsuarios = [...usuariosAtuais];
+        novaListaUsuarios[usuarioIndex] = usuarioAtualizado;
+
+        await salvarListaUsuarios(novaListaUsuarios);
+        setUsuarios(novaListaUsuarios);
+
+        await salvarSessaoUsuario(usuarioAtualizado);
+
+        return {
+            sucesso: true,
+            mensagem: "Senha atualizada com sucesso.",
+        };
+    };
+
     return (
         <authContext.Provider 
             value={{ 
@@ -75,7 +123,8 @@ export function AuthProvider({ children }) {
                 sessao,
                 cadastrarUsuario,
                 logoutUsuario,
-                salvarSessaoUsuario
+                salvarSessaoUsuario,
+                atualizarSenhaUsuario
             }}>
             {children}
         </authContext.Provider>
