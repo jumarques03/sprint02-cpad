@@ -5,6 +5,7 @@ import { mockMap } from "../data/mockMap";
 import { mockMonitoring } from "../data/mockMonitoring";
 import { mockChats } from "../data/mockChats";
 import { mockNotifications } from "../data/mockNotifications";
+import { STATUS_AGUARDANDO } from "../utils/vegetationStatus";
 
 const MockDataContext = createContext();
 
@@ -125,15 +126,40 @@ export function MockDataProvider({ children }) {
     return chats.respostas.default;
   };
 
-  const atualizarStatusTrecho = (trechoId, novoStatus) => {
-    setMapData((prev) => ({
-      ...prev,
-      trechos: prev.trechos.map((trecho) =>
-        trecho.id === trechoId
-          ? { ...trecho, status: novoStatus }
-          : trecho
-      ),
-    }));
+  const atualizarPontosTrecho = (trechoKey) => {
+    const sorteio = Math.random();
+    const resultado = sorteio < 0.7 ? "sucesso" : sorteio < 0.85 ? "vazio" : "erro";
+
+    if (resultado === "erro") {
+      return { status: "erro" };
+    }
+
+    setMapData((prev) => {
+      const trechoAtual = prev.trechos[trechoKey];
+      const trechoOriginal = mockMap.trechos[trechoKey];
+      if (!trechoAtual || !trechoOriginal) return prev;
+
+      const agora = new Date().toISOString();
+
+      const novosPontos =
+        resultado === "vazio"
+          ? []
+          : trechoOriginal.pontos.map((ponto) =>
+              ponto.status === STATUS_AGUARDANDO
+                ? ponto
+                : { ...ponto, timestamp: agora }
+            );
+
+      return {
+        ...prev,
+        trechos: {
+          ...prev.trechos,
+          [trechoKey]: { ...trechoAtual, pontos: novosPontos },
+        },
+      };
+    });
+
+    return { status: resultado };
   };
 
   const value = {
@@ -153,7 +179,7 @@ export function MockDataProvider({ children }) {
     encerrarMonitoramento,
     adicionarAviso,
     enviarMensagemChat,
-    atualizarStatusTrecho,
+    atualizarPontosTrecho,
   };
 
   return (

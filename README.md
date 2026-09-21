@@ -132,13 +132,15 @@ Toda a lógica da Sprint 2 foi construída utilizando Context API e AsyncStorage
 
 ## Mapeamento
 
-- Visualização do trecho atribuído à equipe;
-- Mapa de calor;
+- Mapa interativo (`react-native-maps`) cobrindo o Rodoanel Mário Covas completo;
+- Filtro por trecho (Todos, Oeste, Sul, Leste, Norte);
 - Classificação automática dos pontos monitorados:
   - 🟢 Vegetação abaixo de 10 cm
   - 🟡 Vegetação entre 10 cm e 30 cm
   - 🔴 Vegetação acima de 30 cm
-- Recomendações operacionais geradas pela IA.
+- Detalhe do ponto (km, altura, status e recomendação) ao tocar em um marcador;
+- Recomendações operacionais geradas pela IA;
+- Simulação de atualização dos pontos, incluindo cenários de trecho vazio e falha de carregamento.
 
 ## Avisos
 
@@ -184,13 +186,25 @@ Simula:
 
 ## Mock de Mapeamento
 
-Simula:
+O mock cobre o **Rodoanel Mário Covas (SP-021) completo**, dividido nos 4 trechos reais da rodovia:
 
-- Trecho monitorado;
-- Pontos da rodovia;
-- Altura da vegetação;
-- Status dos trechos;
-- Mapa de calor.
+- **Trecho Oeste** (~32 km) — São Paulo, Barueri, Carapicuíba, Osasco, Cotia e Embu das Artes;
+- **Trecho Sul** (~61 km) — do entroncamento com a Régis Bittencourt (Embu das Artes) até a Av. Papa João XXIII em Mauá, passando por Itapecerica da Serra, São Paulo, São Bernardo do Campo e Ribeirão Pires;
+- **Trecho Leste** (~43,5 km) — liga o Trecho Sul à Rodovia Ayrton Senna e à Presidente Dutra, próximo ao Aeroporto de Guarulhos;
+- **Trecho Norte** (~44 km) — ligaria a Dutra ao Trecho Oeste, passando perto de Guarulhos e da Fernão Dias.
+
+Os pontos são gerados a cada ~750 m ao longo dos quatro trechos (cerca de 243 pontos no total), formando visualmente o traçado da via só com a densidade das bolinhas — sem nenhuma linha desenhada por cima. No mapa nativo, cada ponto é um `Marker` do `react-native-maps` com uma bolinha customizada de tamanho fixo em pixels, para ficar sempre visível na tela independentemente do nível de zoom (diferente de um `Circle`, cujo raio é em metros reais e desaparece quando o mapa é visto de longe). Cada ponto expõe: km, latitude/longitude, altura da vegetação (cm), status (verde/amarelo/vermelho) e recomendação gerada pela IA. Os dados de km, coordenadas e altura são simulados porque, no cenário real, viriam do hardware embarcado nos veículos — a mesma justificativa já usada no projeto para a câmera e a geolocalização.
+
+O **Trecho Norte é representado com cobertura parcial** no mock: parte dos pontos possui leitura completa e o restante aparece com status "aguardando escaneamento" (sem altura ou recomendação), refletindo que esse trecho do Rodoanel ainda está em obras na vida real.
+
+### Estados cobertos pelo mock
+
+| Estado | Onde é simulado |
+| --- | --- |
+| Sucesso | Trechos Oeste, Sul e Leste, com pontos e status variados |
+| Cobertura parcial / dado pendente | Trecho Norte, com pontos em "aguardando escaneamento" |
+| Vazio | Ao acionar "Atualizar pontos do trecho", o mock pode simular um trecho sem nenhum ponto escaneado |
+| Erro | Ao acionar "Atualizar pontos do trecho", o mock pode simular falha ao carregar os dados, com botão de tentar novamente |
 
 ## Mock de Monitoramento
 
@@ -279,6 +293,7 @@ https://www.figma.com/design/TT7nBNLKKnz3fK0f7vxFFX/SPRINT_CROSS-PLATFORM?node-i
 
 - Expo Vector Icons
 - React Native StyleSheet
+- React Native Maps
 
 ---
 
@@ -367,6 +382,21 @@ Nesta Sprint, os recursos de câmera e geolocalização foram simulados através
 Essa decisão foi tomada porque, no contexto da solução proposta, tanto a captura de imagens quanto a localização são provenientes dos dispositivos embarcados nos veículos operacionais e não diretamente do dispositivo móvel.
 
 Dessa forma, os mocks representam o comportamento esperado da futura integração com os equipamentos reais.
+
+O mapa interativo (`react-native-maps`) apenas renderiza a base cartográfica (Apple Maps/Google Maps); nenhum ponto, coordenada de trecho, km ou dado de vegetação exibido nele é buscado de API externa — todos vêm do mock em `data/mockMap.js`.
+
+---
+
+# Testes Manuais — Mapa do Rodoanel
+
+| Cenário testado | Resultado esperado | Resultado obtido | Status |
+| --- | --- | --- | --- |
+| Trocar o trecho selecionado (ex: "Todos" → "Trecho Norte") | A lista/mapa filtra para exibir apenas os pontos do trecho escolhido e o resumo da IA é recalculado | Filtro aplicado corretamente, apenas os 7 pontos do Trecho Norte exibidos e resumo atualizado | ✅ Passou |
+| Abrir um ponto do Trecho Norte sem leitura (ex: Km 144) | Deve exibir estado "Aguardando leitura", sem `undefined` ou quebra de tela | Modal exibiu "Aguardando leitura" com mensagem explicativa, sem erros | ✅ Passou |
+| Abrir um ponto com leitura completa (ex: Km 172, vermelho) | Deve exibir km, altura, status colorido, horário da leitura e recomendação da IA | Modal exibiu todos os dados corretamente (35 cm, vermelho, horário formatado e recomendação) | ✅ Passou |
+| Simular falha ao atualizar um trecho ("Atualizar pontos do trecho") | Deve exibir estado de erro com botão "Tentar novamente", sem travar a tela | Estado de erro exibido corretamente; "Tentar novamente" restaurou os dados do trecho | ✅ Passou |
+| Simular trecho sem nenhum ponto escaneado | Deve exibir estado vazio claro ("Nenhum trecho escaneado ainda"), não uma tela em branco | Estado vazio exibido corretamente com mensagem e botão para tentar atualizar novamente | ✅ Passou (bug corrigido: antes da correção, o trecho ficava vazio permanentemente após esse estado, pois o "sucesso" só atualizava os pontos já existentes; corrigido para regenerar a partir dos dados originais do mock) |
+| Selecionar "Todos" após navegar pelos trechos | Deve agregar os pontos dos 4 trechos, cobrindo o anel completo, e mostrar o resumo geral da IA | Todos os 243 pontos exibidos (espaçamento de ~750 m), agrupados por trecho, resumo geral correto | ✅ Passou |
 
 ---
 
